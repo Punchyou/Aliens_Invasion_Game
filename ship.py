@@ -32,9 +32,11 @@ class Ship():
         ''' Update the ship's position'''
 
         # Update the ship's center value, not the rect
-        if self.moving_right:
+        # If keypress is right and the position is smaller than the right edge of the screen
+        if self.moving_right and self.rect.right < self.screen_rect.right:
             self.center += self.ai_settings.ship_speed_factor
-        if self.moving_left:
+        # The left edga starts at 0
+        if self.moving_left and self.rect.left > 0:
             self.center -= self.ai_settings.ship_speed_factor
         
         # Update rect object from self,center
