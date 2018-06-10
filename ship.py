@@ -10,7 +10,7 @@ class Ship():
 
         # Load the ship image
         self.image = pygame.image.load("images/spaceship.png")
-        self.image = pygame.transform.scale(self.image, (100, 130))
+        self.image = pygame.transform.scale(self.image, (70, 90))
         # Prepare a rectangular area for the image
         self.rect = self.image.get_rect()
         self.screen_rect = screen.get_rect()

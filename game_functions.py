@@ -1,6 +1,8 @@
 import sys
 import pygame
 from bullet import Bullet
+from alien import Alien
+
 def check_keydown_events(event, ai_settings, screen, ship, bullets):
     ''' Respond to keypresses'''
     if event.key == pygame.K_RIGHT:
@@ -8,9 +10,12 @@ def check_keydown_events(event, ai_settings, screen, ship, bullets):
     elif event.key == pygame.K_LEFT:
         ship.moving_left = True
     elif event.key == pygame.K_SPACE:
-        # Create a new bullet to add it in the bullets group
-        new_bullet = Bullet(ai_settings, screen, ship)
-        bullets.add(new_bullet)
+        fire_bullet(ai_settings, screen, ship, bullets)
+
+def fire_bullet(ai_settings, screen, ship, bullets):
+    '''Create a new bullet to add it in the bullets group'''
+    new_bullet = Bullet(ai_settings, screen, ship)
+    bullets.add(new_bullet)
 
 def check_keyup_events(event, ship):
     '''Respond to keypresses'''
@@ -30,7 +35,7 @@ def check_events(ai_settings, screen, ship, bullets):
             check_keyup_events(event, ship)
 
 
-def update_screen(ai_settings, screen, ship, bullets):
+def update_screen(ai_settings, screen, ship, aliens, bullets):
     '''Update images on the screen'''
     #fill background with color
     screen.fill(ai_settings.bg_color)
@@ -39,6 +44,39 @@ def update_screen(ai_settings, screen, ship, bullets):
         bullet.draw_bullet()
     #draw the ship on the screen at a specific position
     ship.blitme()
+    aliens.draw(screen)
+    
     # Make the screen visible
     pygame.display.flip()
-        
+
+def update_bullets(bullets):
+    ''' Update position of bullets and get rif of old bullets.'''
+    # Update bullets positions.
+    bullets.update()
+
+    # Get rid of bullets that have disappearred.
+    for bullet in bullets.copy():
+    # Don't remove items from a list or group within a for loop
+    # Loop over a copy of the 
+        if bullet.rect.bottom <= 0:
+            bullets.remove(bullet) 
+
+def create_fleet(ai_settings, screen, aliens):
+    '''Create a full fleet of aliens.'''
+    # Create an alien and find the nuber of aliens in a row.
+    # Spacing between each alien is equal to one alien width.
+
+    
+    # This alien won't be part of the fleet.
+    alien = Alien(ai_settings, screen)
+    alien_width = alien.rect.width
+    avaliable_spaxe_x = ai_settings.screen_width - 2 * alien_width
+    number_aliens_x = int(avaliable_spaxe_x / (2 * alien_width))
+
+    # First row of aliens.
+    for alien_number in range(number_aliens_x):
+        # Create an alien and place it in the row.
+        alien = Alien(ai_settings, screen)
+        alien.x = alien_width + 2 * alien_width * alien_number
+        alien.rect.x = alien.x
+        aliens.add(alien)
