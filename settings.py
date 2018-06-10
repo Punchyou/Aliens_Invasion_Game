@@ -17,3 +17,9 @@ class Settings():
         self.bullet_height = 15
         self.bullet_color = 98, 253, 98
 
+        # Alien's settings.
+        self.alien_speed_factor = 1
+        # Drop speed for how quickly the fleet drops down the screen.
+        self.fleet_drop_speed = 10
+        # Fleet direction of 1 is right, and -1 is left.
+        self.fleet_direction = 1
