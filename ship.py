@@ -3,7 +3,7 @@ import pygame
 class Ship():
 
     def __init__(self, ai_settings, screen):
-        ''' Initialize the ship and set its starting position'''
+        '''Initialize the ship and set its starting position.'''
 
         self.screen = screen
         self.ai_settings = ai_settings
@@ -29,7 +29,7 @@ class Ship():
         self.moving_left = False
     
     def update(self):
-        ''' Update the ship's position'''
+        """Update the ship's position."""
 
         # Update the ship's center value, not the rect
         # If keypress is right and the position is smaller than the right edge of the screen

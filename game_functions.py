@@ -49,8 +49,8 @@ def update_screen(ai_settings, screen, ship, aliens, bullets):
     # Make the screen visible
     pygame.display.flip()
 
-def update_bullets(bullets):
-    ''' Update position of bullets and get rif of old bullets.'''
+def update_bullets(ai_settings, screen, ship, aliens, bullets):
+    '''Update position of bullets and get rif of old bullets.'''
     # Update bullets positions.
     bullets.update()
 
@@ -59,37 +59,63 @@ def update_bullets(bullets):
     # Don't remove items from a list or group within a for loop
     # Loop over a copy of the 
         if bullet.rect.bottom <= 0:
-            bullets.remove(bullet) 
+            bullets.remove(bullet)
 
-def create_fleet(ai_settings, screen, aliens):
+    check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets)
+    
+def check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets):
+    # Check for any bullets that have hit aliens, with groupcollide().
+    # If so, get rid of the bullet and the alien.
+    collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
+    if len(aliens) == 0:
+        # Destroy existing bullets and create new fleet.
+        bullets.empty()
+        create_fleet(ai_settings, screen, ship, aliens)
+
+def get_number_alliens_x(ai_settings, alien_width):
+    """Determine the number of aliens that fit in a row."""
+    avaliable_spaxe_x = ai_settings.screen_width - 2 * alien_width
+    number_aliens_x = int(avaliable_spaxe_x / (2 * alien_width))
+    return number_aliens_x
+
+def get_number_rows(ai_settings, ship_height, alien_height):
+    """Determine the number of rows of aliens that fit on the screen."""
+    availiable_space_y = (ai_settings.screen_height - (3 * alien_height) - ship_height)
+    number_rows = int(availiable_space_y / (2 * alien_height))
+    return number_rows
+
+def create_alien(ai_settings, screen, aliens, alien_number, row_number):
+    alien = Alien(ai_settings, screen)
+    alien_width = alien.rect.width
+    alien.x = alien_width + 2 * alien_width * alien_number
+    alien.rect.x = alien.x
+    alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number
+    aliens.add(alien)
+
+def create_fleet(ai_settings, screen, ship, aliens):
     '''Create a full fleet of aliens.'''
     # Create an alien and find the nuber of aliens in a row.
     # Spacing between each alien is equal to one alien width.
-
-    
-    # This alien won't be part of the fleet.
     alien = Alien(ai_settings, screen)
-    alien_width = alien.rect.width
-    avaliable_spaxe_x = ai_settings.screen_width - 2 * alien_width
-    number_aliens_x = int(avaliable_spaxe_x / (2 * alien_width))
+    number_aliens_x = get_number_alliens_x(ai_settings, alien.rect.width)
+    number_rows = get_number_rows(ai_settings, ship.rect.height, alien.rect.height)
 
-    # First row of aliens.
-    for alien_number in range(number_aliens_x):
-        # Create an alien and place it in the row.
-        alien = Alien(ai_settings, screen)
-        alien.x = alien_width + 2 * alien_width * alien_number
-        alien.rect.x = alien.x
-        aliens.add(alien)
-
+    # Create fleet of aliens.
+    for row_number in range(number_rows):
+        # Create row of aliens.
+        for alien_number in range(number_aliens_x):
+            # Create an alien and place it in the row.
+            create_alien(ai_settings, screen, aliens, alien_number, row_number)
+        
 def check_fleet_edges(ai_settings, aliens):
-    " Check if any alien has reached an edge."
+    "Check if any alien has reached an edge."
     for alien in aliens.sprites():
         if alien.check_edges():
             change_fleet_direction(ai_settings, aliens)
             break
 
 def change_fleet_direction(ai_settings, aliens):
-    " Drop entire fleet and change its direction."
+    "Drop entire fleet and change its direction."
     for alien in aliens.sprites():
         alien.rect.y += ai_settings.fleet_drop_speed
     ai_settings.fleet_direction *= -1

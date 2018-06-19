@@ -6,7 +6,7 @@ class Bullet(Sprite):
     # A class about the bullets that the ship fires.
 
     def __init__(self, ai_settings, screen, ship):
-        ''' Set bullet's object position at the ship's position.'''
+        '''Set bullet's object position at the ship's position.'''
 
         # The super function can be used to gain access to inherited methods
         # from a parent or sibling class
@@ -28,12 +28,12 @@ class Bullet(Sprite):
         self.speed_factor = ai_settings.bullet_speed_factor
     
     def update(self):
-        ''' Move the bullet up the screen.'''
+        '''Move the bullet up the screen.'''
         # Update the decimal position of the bullet.
         self.y -= self.speed_factor
         # Update the rect position.
         self.rect.y = self.y
     
     def draw_bullet(self):
-        ''' Draw the bullet to the screen.'''
+        '''Draw the bullet to the screen.'''
         pygame.draw.rect(self.screen, self.color, self.rect)
