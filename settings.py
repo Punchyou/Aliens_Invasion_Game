@@ -10,7 +10,7 @@ class Settings():
         # Ship's settings
         # Adjust the speed of the ship (by pixels)
         self.ship_speed_factor = 1
-
+        self.ship_limit = 3
         # Bullet's settings
         self.bullet_speed_factor = 2
         self.bullet_width = 3
@@ -20,6 +20,6 @@ class Settings():
         # Alien's settings.
         self.alien_speed_factor = 0.4
         # Drop speed for how quickly the fleet drops down the screen.
-        self.fleet_drop_speed = 3
+        self.fleet_drop_speed = 10
         # Fleet direction of 1 is right, and -1 is left.
         self.fleet_direction = 1
