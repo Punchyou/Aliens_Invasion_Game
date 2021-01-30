@@ -1,10 +1,26 @@
 import pygame
 from pygame.sprite import Sprite
 
-class Ship(Sprite):
 
+class Ship(Sprite):
+    """
+    A class that with the ship's characteristics and position.
+    """
     def __init__(self, ai_settings, screen):
-        '''Initialize the ship and set its starting position.'''
+        """Initialize the ship and set its starting position.
+
+        Parameters
+        ----------
+        ai_settings : 
+            settinggs.Settings object
+        screen : 
+            pygame.Surface class
+
+        Returns
+        -------
+        None.
+
+        """
 
         super(Ship, self).__init__()
 
@@ -26,29 +42,50 @@ class Ship(Sprite):
         # Because rect will store only integers
         self.center = float(self.rect.centerx)
 
-
         # Movement flags
         self.moving_right = False
         self.moving_left = False
-    
+
     def update(self):
-        """Update the ship's position."""
+        """
+        Update the ship's position.
+
+        Returns
+        -------
+        None.
+
+        """
 
         # Update the ship's center value, not the rect
-        # If keypress is right and the position is smaller than the right edge of the screen
+        # If keypress is right and the position is smaller than the right
+        # edge of the screen
         if self.moving_right and self.rect.right < self.screen_rect.right:
             self.center += self.ai_settings.ship_speed_factor
         # The left edga starts at 0
         if self.moving_left and self.rect.left > 0:
             self.center -= self.ai_settings.ship_speed_factor
-        
+
         # Update rect object from self,center
         self.rect.centerx = self.center
-    
+
     def blitme(self):
-        # Dreaw the ship and the location
+        """
+        Draw the ship and its location
+
+        Returns
+        -------
+        None.
+
+        """
         self.screen.blit(self.image, self.rect)
-    
+
     def center_ship(self):
-        """ Center the ship."""
+        """
+        Center the ship.
+
+        Returns
+        -------
+        None.
+
+        """
         self.center = self.screen_rect.centerx
